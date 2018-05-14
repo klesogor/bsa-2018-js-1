@@ -1,0 +1,55 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+    <div style = "float:left; text-align:center;margin:5px;padding:5px;" id="fighter">
+            <span style = "font-style: italic; display:block;"> Боец </span>
+            <input type = "text" id="nameB" placeholder="Имя:" style="display: block;"></input>
+            <input type = "text" id="dmgB" placeholder="Урон:" style="display: block;"></input>
+            <input type = "text" id ="healthB" placeholder="Здоровье:" style="display: block;"></input>
+    </div>
+    <div style = "float:right; text-align:center;margin:5px;padding:5px;" id = "ifighter">
+        <span style = "font-style: italic; display: block;"> Улучшенный боец </span>
+        <input type = "text" id="nameI" placeholder="Имя:" style="display: block;"></input>
+        <input type = "text" id="dmgI" placeholder="Урон:" style="display: block;"></input>
+        <input type = "text" id ="healthI" placeholder="Здоровье:" style="display: block;"></input>
+    </div>
+    <span style = "display: table;clear:both; content:' '">
+    <div style="text-align:center; margin:auto;padding:5px;">
+        <input type = "text" placeholder="Колличество ходов:" id = "turns">
+        <button id = "fight">Драка!</button>
+    </div>
+        <script type = "module">
+            import fight from './fight.js';
+            import Fighter from './fighter.js';
+            import ImprovedFighter from './ImprovedFighter.js';
+
+            const start_fight = () =>
+            {
+                const validate = (...[name,damage,health]) => { return (typeof(name) === 'string' 
+                            && typeof(+damage) === 'number' 
+                            && typeof(+health) === 'number') }
+                try{
+                    if(!(validate(nameB.value,dmgB.value,healthB.value)||validate(nameI.value,dmgI.value,healthI.value)))
+                        throw "Указаны неверные входные параметры для бойцов!";
+                    if(typeof(+turns.value)!=='number'||turns.value<0)
+                        throw "Указано неверное колличество ходов!";
+                    let Fighter1 = new Fighter(nameB.value,dmgB.value,healthB.value),
+                        Fighter2 = new ImprovedFighter(nameI.value,dmgI.value,healthI.value);
+                    for(var a = [],i = 0;i<turns.value;i++){
+                        a.push(Math.round(Math.random()*4));
+                    }
+                    fight(Fighter1,Fighter2,...a);
+                }catch(e){
+                    console.log(e);
+                }
+                
+            }
+            document.getElementById('fight').onclick = start_fight;
+        </script>
+        <script type = "module" src="fight.js"></script>
+        <script type = "module" src="Fighter.js"></script>
+        <script type = "module" src="ImprovedFighter.js"></script>
+    </body>
+</html>
