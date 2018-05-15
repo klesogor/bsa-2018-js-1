@@ -8,7 +8,7 @@ export default class Fighter
     }
 
     setDamage(damage){
-        this.health -= Number(damage);
+        this.health -= damage;
     }
 
     hit(enemy,point)
