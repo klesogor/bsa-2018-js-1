@@ -3,7 +3,14 @@ import ImprovedFighter from './ImprovedFighter.js';
 
 export default function fight(fighter1,fighter2,...params)
 {
-    function attack(attacker,defender,point)
+   //Definition of helper functions
+    const validate = () => { //for some reason instanceof wasn't working 
+            params.map( (item) =>{
+            valid = ( typeof(+item) === 'Number');
+        });
+        return valid;
+    }
+    const  attack = (attacker,defender,point) =>
     {
         const log = (x) =>{console.log(x);}
         if(attacker instanceof ImprovedFighter && Math.random()>0.8){
@@ -16,7 +23,7 @@ export default function fight(fighter1,fighter2,...params)
         }
         log(`У ${defender.name} осталось ${Math.ceil(defender.health)} очков жизни!`);
     }
-    function end_game(...[turns,winner])
+    const  end_game = (...[turns,winner]) =>
     {
         console.log("Это был тяжелый бой!");
         if(winner != null){
@@ -38,15 +45,21 @@ export default function fight(fighter1,fighter2,...params)
             current = [next,next = current][0];
             return false; 
     }
+
+    //Fight itself
+    if(!validate()){
+        throw 'Драка не состоялась из-за технических неполадок';
+    } 
     let counter = 0,
         init = Math.random(),
         current = init>0.5 ? fighter1 : fighter2,
         next = init>0.5 ? fighter2 : fighter1;
-        for(let i = 0;i<params.length;i++,++counter){
-            if(doAttack(params[i])){
-                end_game(counter,next);
-                return;
-            }
+    for(let i = 0;i<params.length;i++,++counter){//Maybe should use Monades and Functors here?
+        if(doAttack(params[i])){
+            end_game(counter,next);
+            return;
         }
-        end_game(counter);
+    }
+    end_game(counter);
+
 }
